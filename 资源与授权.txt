@@ -1,0 +1,25 @@
+纸间打字机 — 字体与录音
+
+霞鹜新致宋 1.071（LXGW Neo ZhiSong）
+https://github.com/lxgw/LxgwNeoZhiSong
+IPA Font License 1.0，全文在同目录 IPA-LICENSE.md。
+在便签右上角「⋯」中选择「使用 IPA 原版中文字体」，即可切换回已附带的 IPAex 明朝原版。
+IPAex 明朝 004.01 由文字信息技术促进协议会发布。
+https://moji.or.jp/ipafont/ipaex00401/
+
+Courier Prime Regular
+Alan Dague-Greene / Quote-Unquote Apps
+https://quoteunquoteapps.com/courierprime/
+SIL Open Font License 1.1，全文在同目录 CourierPrime-OFL.txt。
+
+Pixelify Sans（用于 Paperframe 标识和日期）
+https://github.com/google/fonts/tree/main/ofl/pixelifysans
+SIL Open Font License 1.1，全文在同目录 PixelifySans-OFL.txt。
+
+打字机单键录音：yottasounds，CC0 1.0
+https://freesound.org/people/yottasounds/sounds/380137/
+打字机铃声与回车录音：knufds，CC0 1.0
+https://freesound.org/people/knufds/sounds/345955/
+
+纸面起伏素材：ambientCG Paper 001（Displacement），CC0 1.0
+https://ambientcg.com/view?id=Paper001

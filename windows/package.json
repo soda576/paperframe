@@ -1,0 +1,34 @@
+{
+  "name": "paperframe",
+  "productName": "Paperframe",
+  "version": "1.0.0",
+  "description": "A typewriter-inspired desktop note for the things you want to get done today.",
+  "author": "Paperframe contributors",
+  "license": "MIT",
+  "main": "main.cjs",
+  "scripts": {
+    "start": "electron .",
+    "test": "node --test tests/model.test.cjs",
+    "smoke": "node tests/smoke.cjs",
+    "package": "electron-builder --win portable --x64 --publish never"
+  },
+  "devDependencies": {
+    "electron": "45.4.1",
+    "electron-builder": "26.18.0",
+    "playwright-core": "1.61.1"
+  },
+  "build": {
+    "appId": "com.soda.paperframe.windows",
+    "files": [
+      "main.cjs", "preload.cjs", "model.js", "icon.ico", "renderer/**",
+      { "from": "../Assets", "to": "assets", "filter": ["*.ttf", "*.wav", "*.jpg", "*.md", "*.txt"] },
+      { "from": "..", "to": "licenses", "filter": ["LICENSE", "资源与授权.txt"] }
+    ],
+    "win": {
+      "icon": "icon.ico",
+      "target": "portable",
+      "signExecutable": false,
+      "artifactName": "Paperframe-${version}-Windows-${arch}.exe"
+    }
+  }
+}

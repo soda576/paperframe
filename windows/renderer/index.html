@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; media-src 'self'">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Paperframe</title>
+  <link rel="stylesheet" href="paper.css">
+  <script src="model.js" defer></script>
+  <script src="paper.js" defer></script>
+</head>
+<body>
+  <div id="shell">
+    <aside id="archive" aria-label="便签档案" hidden>
+      <header class="month-header">
+        <strong id="month-number"></strong>
+        <div class="month-controls">
+          <button id="previous" aria-label="上个月">‹</button>
+          <input id="month" type="month" aria-label="选择年份和月份">
+          <button id="next" aria-label="下个月">›</button>
+        </div>
+      </header>
+      <div class="week" aria-hidden="true"><span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span>六</span><span>日</span></div>
+      <div id="calendar"></div>
+      <footer><span class="legend"><i></i>有便签</span><button id="today">回到今天</button></footer>
+    </aside>
+    <main id="note">
+      <header class="note-bar">
+        <button id="library">便签档案</button>
+        <input id="date" type="date" aria-label="便签日期">
+        <button id="settings-button" aria-label="显示设置" aria-expanded="false">⋯</button>
+      </header>
+      <p id="progress" aria-live="polite" hidden></p>
+      <div id="scroll">
+        <div id="sheet">
+          <ol id="tasks" aria-label="任务"></ol>
+          <div id="light" aria-hidden="true"></div>
+          <div id="rail" aria-hidden="true"><div id="typehead"><i></i><i></i><i></i></div></div>
+        </div>
+      </div>
+      <button id="new-task" aria-label="添加主任务">＋</button>
+      <p id="status" role="alert" hidden></p>
+    </main>
+    <aside id="settings" aria-label="设置" hidden>
+      <h2>设置</h2>
+      <fieldset><legend>光线与纸张</legend>
+        <label>主题 <select data-pref="theme"><option value="system">跟随系统</option><option value="day">白天</option><option value="night">夜间</option></select></label>
+        <label>纸色 <select data-pref="paper"><option value="plain">原纸</option><option value="blue">冰蓝</option><option value="green">灰绿</option></select></label>
+        <label>夜间开灯 <input data-pref="lamp" type="checkbox"></label>
+        <label>灯光颜色 <select data-pref="lampColor"><option value="neutral">中性</option><option value="warm">暖黄</option><option value="cool">冷蓝</option></select></label>
+        <label>灯光强度 <input data-pref="lampIntensity" type="range" min="0" max="100"></label>
+        <label>灯光范围 <input data-pref="lampRange" type="range" min="45" max="165"></label>
+      </fieldset>
+      <fieldset><legend>字体与油墨</legend>
+        <label>字体 <select data-pref="font"><option value="print">纸间印刷</option><option value="ipa">IPA 明朝</option><option value="system">系统字体</option></select></label>
+        <label>字号 <input data-pref="fontSize" type="range" min="12" max="28"></label>
+        <label>行间距 <input data-pref="spacing" type="range" min="0" max="24"></label>
+        <label>字色 <select data-pref="ink"><option value="original">原墨</option><option value="blue">蓝墨</option><option value="red">红墨</option></select></label>
+      </fieldset>
+      <fieldset><legend>桌面便签</legend>
+        <label>机械打字声 <input data-pref="sound" type="checkbox"></label>
+        <label>始终置顶 <input data-pref="pinned" type="checkbox"></label>
+      </fieldset>
+    </aside>
+  </div>
+</body>
+</html>

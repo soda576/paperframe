@@ -1,0 +1,77 @@
+name: Build desktop packages
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  windows:
+    runs-on: windows-2025
+    timeout-minutes: 18
+    defaults:
+      run:
+        working-directory: windows
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: windows/package-lock.json
+      - run: npm ci
+      - run: npm test
+      - run: npm run package
+      - name: Test the Windows app
+        run: npm run smoke -- dist/win-unpacked/Paperframe.exe
+      - name: Open the portable EXE
+        shell: pwsh
+        run: |
+          $env:PAPERFRAME_TEST_DATA = Join-Path $env:RUNNER_TEMP 'paperframe-portable'
+          $executable = Get-Item 'dist/Paperframe-*-Windows-x64.exe'
+          $launcher = Start-Process -FilePath $executable.FullName -PassThru
+          $window = $null
+          try {
+            foreach ($attempt in 1..45) {
+              $window = Get-Process -Name Paperframe -ErrorAction SilentlyContinue |
+                Where-Object MainWindowTitle -eq 'Paperframe' | Select-Object -First 1
+              if ($window) { break }
+              Start-Sleep -Seconds 1
+            }
+            if (!$window) { throw 'The portable EXE did not open a Paperframe window.' }
+            if (!$window.CloseMainWindow() -or !$window.WaitForExit(15000)) {
+              throw 'Paperframe did not close normally.'
+            }
+            if (!$launcher.WaitForExit(15000) -or $launcher.ExitCode -ne 0) {
+              throw 'The portable EXE did not exit cleanly.'
+            }
+          } finally {
+            if (!$launcher.HasExited) { Stop-Process -Id $launcher.Id -ErrorAction SilentlyContinue }
+          }
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
+        with:
+          name: Paperframe-Windows
+          path: windows/dist/Paperframe-*-Windows-x64.exe
+          if-no-files-found: error
+
+  macos:
+    runs-on: macos-26
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+      - name: Test storage and calendar
+        run: |
+          swiftc Sources/PlansStore.swift Sources/ActivityHistory.swift Tests/StoreChecks.swift -o /tmp/paperframe-checks
+          /tmp/paperframe-checks
+      - run: bash scripts/package-macos.sh
+      - name: Verify disk image and executable architectures
+        run: |
+          hdiutil verify dist/*.dmg
+          lipo build/Paperframe.app/Contents/MacOS/PaperTypewriter -verify_arch arm64 x86_64
+          codesign --verify --strict build/Paperframe.app
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
+        with:
+          name: Paperframe-macOS
+          path: dist/*.dmg
+          if-no-files-found: error
